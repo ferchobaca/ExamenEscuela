@@ -31,7 +31,6 @@ namespace ExamenEscuela.Controllers
             return Ok("Profesor creado");
         }
 
-        // READ TODOS
         [HttpGet]
         public async Task<ActionResult<List<Profesor>>> ObtenerProfesores()
         {
@@ -46,11 +45,10 @@ namespace ExamenEscuela.Controllers
             return Ok(profesores);
         }
 
-        // READ POR ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Profesor>> ObtenerProfesorPorId(int id)
         {
-            var profesores = await _context.Set<Profesor>()
+            var profesor = await _context.Set<Profesor>()
                 .FromSqlRaw("EXEC sp_Profesor_CRUD @Operacion, @idProfesor, @nombre, @apellido",
                     new SqlParameter("@Operacion", "READ"),
                     new SqlParameter("@idProfesor", id),
@@ -58,7 +56,6 @@ namespace ExamenEscuela.Controllers
                     new SqlParameter("@apellido", DBNull.Value))
                 .ToListAsync();
 
-            var profesor = profesores.FirstOrDefault();
 
             if (profesor == null)
                 return NotFound();
@@ -66,7 +63,6 @@ namespace ExamenEscuela.Controllers
             return Ok(profesor);
         }
 
-        // UPDATE
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarProfesor(int id, [FromBody] Profesor profesor)
         {
@@ -81,7 +77,6 @@ namespace ExamenEscuela.Controllers
             return Ok("Profesor actualizado");
         }
 
-        // DELETE
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarProfesor(int id)
         {

@@ -50,7 +50,7 @@ namespace ExamenEscuela.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Alumnos>> ObtenerAlumnoPorId(int id)
         {
-            var alumnos = await _context.Set<Alumnos>()
+            var alumno = await _context.Set<Alumnos>()
                 .FromSqlRaw("EXEC sp_Alumnos_CRUD @Operacion, @idAlumno, @nombre, @apellido, @fechaNacimiento",
                     new SqlParameter("@Operacion", "READ"),
                     new SqlParameter("@idAlumno", id),
@@ -58,8 +58,6 @@ namespace ExamenEscuela.Controllers
                     new SqlParameter("@apellido", DBNull.Value),
                     new SqlParameter("@fechaNacimiento", DBNull.Value))
                 .ToListAsync();
-
-            var alumno = alumnos.FirstOrDefault();
 
             if (alumno == null)
                 return NotFound();
@@ -72,7 +70,7 @@ namespace ExamenEscuela.Controllers
             await _context.Database.ExecuteSqlRawAsync(
                 "EXEC sp_Alumnos_CRUD @Operacion, @idAlumno, @nombre, @apellido, @fechaNacimiento",
                 new SqlParameter("@Operacion", "UPDATE"),
-                new SqlParameter("@idProfesor", id),
+                new SqlParameter("@idAlumno", id),
                 new SqlParameter("@nombre", alumno.nombre),
                 new SqlParameter("@apellido", alumno.apellido),
                 new SqlParameter("@fechaNacimiento", alumno.fechaNacimiento)

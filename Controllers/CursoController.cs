@@ -50,7 +50,7 @@ namespace ExamenEscuela.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Curso>> ObtenerCursoPorId(int id)
         {
-            var cursos = await _context.Set<Curso>().FromSqlRaw(
+            var curso = await _context.Set<Curso>().FromSqlRaw(
                 "EXEC sp_Curso_CRUD @Operacion, @idCurso, @nombre, @descripcion, @idProfesor",
                 new SqlParameter("@Operacion", "READ"),
                 new SqlParameter("@idCurso", id),
@@ -58,8 +58,6 @@ namespace ExamenEscuela.Controllers
                 new SqlParameter("@descripcion", DBNull.Value),
                 new SqlParameter("@idProfesor", DBNull.Value)
             ).ToListAsync();
-
-            var curso = cursos.FirstOrDefault();
 
             if (curso == null)
                 return NotFound();
@@ -91,6 +89,7 @@ namespace ExamenEscuela.Controllers
                 new SqlParameter("@idCurso", id),
                 new SqlParameter("@nombre", DBNull.Value),
                 new SqlParameter("@descripcion", DBNull.Value),
+
                 new SqlParameter("@idProfesor", DBNull.Value)
             );
 
